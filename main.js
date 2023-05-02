@@ -1,7 +1,7 @@
-const Pieces = document.querySelectorAll('img');
+const pieces = document.querySelectorAll('img');
 const squares = document.querySelectorAll('.squares');
 
-Pieces.forEach(piece => {
+pieces.forEach(piece => {
   piece.addEventListener('dragstart', dragStart);
 });
 
@@ -21,11 +21,10 @@ function dragOver(e) {
 }
 
 function dragDrop(e) {
-  const dropZone = e.target;
-  if (!dropZone.children.length) {
-    dropZone.appendChild(beingDragged);
-  } else {
-    const originalSquare = beingDragged.parentElement;
-    originalSquare.appendChild(beingDragged);
+  if (e.target.children.length === 0) {
+    e.target.appendChild(beingDragged);
+  }
+  else {
+    alert('Cannot place piece on top of another piece.');
   }
 }
