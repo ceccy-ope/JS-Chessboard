@@ -1,48 +1,31 @@
-const pieces = document.querySelectorAll('img');
-const squares = document.querySelectorAll('.square');
+const Pieces = document.querySelectorAll('img');
+const squares = document.querySelectorAll('.squares');
 
-pieces.forEach(piece => {
+Pieces.forEach(piece => {
   piece.addEventListener('dragstart', dragStart);
-  piece.addEventListener('dragend', dragEnd);
 });
 
 squares.forEach(square => {
   square.addEventListener('dragover', dragOver);
-  square.addEventListener('dragenter', dragEnter);
-  square.addEventListener('dragleave', dragLeave);
   square.addEventListener('drop', dragDrop);
 });
 
-let draggedPiece = null;
+let beingDragged;
 
 function dragStart(e) {
-  draggedPiece = e.target;
-  setTimeout(() => {
-    e.target.style.display = 'none';
-  }, 0);
-}
-
-function dragEnd(e) {
-  draggedPiece.style.display = 'block';
-  draggedPiece = null;
+  beingDragged = e.target;
 }
 
 function dragOver(e) {
   e.preventDefault();
 }
 
-function dragEnter(e) {
-  e.preventDefault();
-  this.classList.add('hovered');
-}
-
-function dragLeave() {
-  this.classList.remove('hovered');
-}
-
 function dragDrop(e) {
-  if (!this.querySelector('img')) {
-    this.append(draggedPiece);
+  const dropZone = e.target;
+  if (!dropZone.children.length) {
+    dropZone.appendChild(beingDragged);
+  } else {
+    const originalSquare = beingDragged.parentElement;
+    originalSquare.appendChild(beingDragged);
   }
-  this.classList.remove('hovered');
 }
