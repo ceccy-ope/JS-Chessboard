@@ -1,33 +1,48 @@
-const pieces = document.querySelectorAll('img')
-const squares = document.querySelectorAll('.squares')
+const pieces = document.querySelectorAll('img');
+const squares = document.querySelectorAll('.square');
 
 pieces.forEach(piece => {
-  piece.addEventListener('dragstart', dragStart)
-})
+  piece.addEventListener('dragstart', dragStart);
+  piece.addEventListener('dragend', dragEnd);
+});
 
 squares.forEach(square => {
-  square.addEventListener('dragover', dragOver)
-  square.addEventListener('drop', dragDrop)
-})
+  square.addEventListener('dragover', dragOver);
+  square.addEventListener('dragenter', dragEnter);
+  square.addEventListener('dragleave', dragLeave);
+  square.addEventListener('drop', dragDrop);
+});
 
-let beingDragged
+let draggedPiece = null;
 
 function dragStart(e) {
-  beingDragged = e.target
+  draggedPiece = e.target;
+  setTimeout(() => {
+    e.target.style.display = 'none';
+  }, 0);
+}
+
+function dragEnd(e) {
+  draggedPiece.style.display = 'block';
+  draggedPiece = null;
 }
 
 function dragOver(e) {
-  e.preventDefault()
+  e.preventDefault();
+}
+
+function dragEnter(e) {
+  e.preventDefault();
+  this.classList.add('hovered');
+}
+
+function dragLeave() {
+  this.classList.remove('hovered');
 }
 
 function dragDrop(e) {
-  const targetSquare = e.target
-
-  // Check if the target square already has a piece
-  if (targetSquare.querySelector('img')) {
-    return
+  if (!this.querySelector('img')) {
+    this.append(draggedPiece);
   }
-
-  // Append the piece to the target square
-  targetSquare.append(beingDragged)
+  this.classList.remove('hovered');
 }
